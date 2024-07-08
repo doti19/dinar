@@ -1,0 +1,11 @@
+module.exports.authJoiValidator = require('./auth.joi.validator');
+module.exports.userJoiValidator = require('./user.joi.validator');
+module.exports.messageJoiValidator = require('./message.joi.validator');
+module.exports.groupJoiValidator = require('./group.joi.validator');
+module.exports.groupChatJoiValidator = require('./group.chat.joi.validator');
+module.exports.chatJoiValidator = require('./chat.joi.validator');
+module.exports.postJoiValidator = require('./post.joi.validator');
+module.exports.loanRequestJoiValidator = require('./loan_request.joi.validator');
+// module.exports.loanContract.joiValidator = require('./loan_contract.joi.validator');
+module.exports.bankCardJoiValidator = require('./bank_card.joi.validator');
+module.exports.bankJoiValidator= require('./bank.joi.validator');

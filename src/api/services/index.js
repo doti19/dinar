@@ -1,0 +1,13 @@
+module.exports.authService = require('./auth.service');
+module.exports.userService = require('./user.service');
+module.exports.messageService = require('./message.service');
+module.exports.groupService = require('./group.service');
+module.exports.groupChatService = require('./group.chat.service');
+module.exports.chatService = require('./chat.service');
+// module.exports.PushNotification = require('./push_notification');
+module.exports.notificationService = require('./notification.service');
+module.exports.postService = require('./post.service');
+module.exports.loanRequestService = require('./loan_request.service');
+module.exports.loanContractService = require('./loan_contract.service');
+module.exports.bankCardService = require('./bank_card.service');
+module.exports.bankService = require('./bank.service');
