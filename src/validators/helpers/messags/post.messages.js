@@ -10,7 +10,7 @@ const loanReason = {
     'string.empty': 'Loan reason cannot be empty',
     'any.required': 'Loan reason is required',
     'string.base': 'Loan reason must be a string',
-    'any.only': 'Loan reason must be either business, education, travel, medical, shopping, houseBuying, carBuying or other',
+    'any.only': 'Loan reason must be either business, education, travel, medical, shopping, wedding, houseBuying, carBuying or other',
 }
 
 const loanReasonDescription = {
@@ -21,7 +21,7 @@ const type = {
     'string.empty': 'Type cannot be empty',
     'any.required': 'Type is required',
     'string.base': 'Type must be a string',
-    'any.only': 'Type must be either lending or borrowing',
+    'any.only': 'Type must be either inCash or inKind',
 }
 
 const images = {
@@ -44,8 +44,8 @@ const amount = {
 }
 
 const duration = {
-    'number.base': 'Duration must be a number',
-    'any.required': 'Duration is required',
+    'number.base': 'Tenure must be a number',
+    'any.required': 'Tenure is required',
 
 }
 
@@ -57,22 +57,29 @@ const overdueInterestRate = {
 
 const maxInterestRate = {
     'number.base': 'Max interest rate must be a number',
+    'any.allowOnly': 'Max interest rate can only be a number or null',
+
+    
 }
 
 const maxAmount = {
     'number.base': 'Max amount must be a number',
+    'any.allowOnly': 'Max amount can only be a number or null',
 }
 
 const maxDuration = {
-    'number.base': 'Max duration must be a number',
+    'number.base': 'Max tenure must be a number',
+    'any.allowOnly': 'Max tenure can only be a number or null',
 }
 
 const maxOverdueInterestRate = {
     'number.base': 'Max overdue interest rate must be a number',
+    'any.allowOnly': 'Max overdue interest rate can only be a number or null',
 }
 
 const rejectionReason = {
     'string.base': 'Rejection reason must be a string',
+    'any.allowOnly': 'Rejection reason can only be a number or null',
 }
 
 
@@ -87,6 +94,16 @@ const postDescription = {
     'string.empty': 'Content cannot be empty',
     'any.required': 'Content is required',
     'string.base': 'Content must be a string',
+}
+
+const postExpiresAfter={
+    'number.base': 'Post expires after must be a number',
+    'any.required': 'Post expires after is required',
+    'number.positive': 'Post expires after must be a positive number',
+    'number.integer': 'Post expires after must be an integer',
+    'number.min': 'Post expires after must be greater than 0',
+    'number.max': 'Post expires after must be less than 15',
+
 }
 
 
@@ -107,5 +124,5 @@ module.exports = {
     maxDuration,
     maxOverdueInterestRate,
     rejectionReason,
-
+    postExpiresAfter
 }

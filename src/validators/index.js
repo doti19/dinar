@@ -9,3 +9,5 @@ module.exports.loanRequestJoiValidator = require('./loan_request.joi.validator')
 // module.exports.loanContract.joiValidator = require('./loan_contract.joi.validator');
 module.exports.bankCardJoiValidator = require('./bank_card.joi.validator');
 module.exports.bankJoiValidator= require('./bank.joi.validator');
+module.exports.blogJoiValidator = require('./blog.joi.validator');
+module.exports.ransomJoiValidator = require('./ransom.joi.validator');

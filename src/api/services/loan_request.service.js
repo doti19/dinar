@@ -1,6 +1,6 @@
 const {User, LoanRequest, LoanContract, BankCard} = require('../models');
 const {APIError} = require('../../errors/apiError');
-const {APIFeatures} = require('../../utils/apiFeatures');
+const APIFeatures = require('../../utils/apiFeatures');
 
 const logger = require('../../config/logger');
 const {loanRequestJoiValidator} = require('../../validators');
@@ -26,6 +26,26 @@ const createLoanRequest = async (user, body) => {
         throw new APIError(400, "Bank Card does not belong to you");
     }
 
+    const userLoans = await LoanRequest.find({
+        sender: user._id,
+        status: {$in: ['pending', 'approved']}
+    });
+    const totalLoanAmount = userLoans.reduce((acc, loan) => acc + loan.loanAmount, 0);
+
+
+    const ransoms = user.ransoms;
+    let totalAmountUserCanBorrow = 0;
+    ransoms.forEach(ransom =>{
+        if(ransom.type === 'salary'){
+            totalAmountUserCanBorrow +=ransom.value*0.3;
+        }else if(ransom.type === 'property'){
+            totalAmountUserCanBorrow +=ransom.value*0.75;
+    }
+});
+
+if(totalLoanAmount + body.loanAmount > totalAmountUserCanBorrow){
+    throw new APIError(400, "You can not borrow more than 30% of your salary or 75% of your property value");
+}
 
     const newLoanRequest = new LoanRequest({
 
@@ -50,8 +70,11 @@ const getSentLoanRequests = async (user, query) => {
         .populate("sender", "firstName lastName email avatar")
         .populate('receiverBankCard', 'bank')
         .populate('senderBankCard', 'bank');
-
-    return loanRequests;
+        
+        limit = query.limit? query.limit : 10;
+        return {
+            result: loanRequests,
+            num_of_pages: Math.ceil(loanRequests.length / limit)};
 };
 
 const getReceivedLoanRequests = async (user, query) => {
@@ -67,7 +90,10 @@ const getReceivedLoanRequests = async (user, query) => {
     .populate('receiverBankCard', 'bank')
     .populate('senderBankCard', 'bank');;
 
-    return loanRequests;
+    limit = query.limit? query.limit : 10;
+        return {
+            result: loanRequests,
+            num_of_pages: Math.ceil(loanRequests.length / limit)};
 };
 
 const approveLoanRequest = async (user, loanRequestId) => {
@@ -90,6 +116,19 @@ const approveLoanRequest = async (user, loanRequestId) => {
     loanRequest.status = "approved";
     loanRequest.receiverBankCard = bankCard._id;
     await loanRequest.save();
+     await LoanContract.create({
+        borrower: loanRequest.sender,
+        lender: loanRequest.receiver,
+        amount: loanRequest.loanAmount,
+        loanRequest: loanRequest._id,
+        tenureInMonths: loanRequest.loanTenureMonths,
+        interestRate: loanRequest.interestRate,
+        loanReason: loanRequest.loanReason,
+        loanReasonType: loanRequest.loanReasonType,
+        overdueInterestRate: loanRequest.overdueInterestRate,
+        borrowerBank: loanRequest.senderBankCard,
+        lenderBank: loanRequest.receiverBankCard,
+    });
     return loanRequest;
 }
 

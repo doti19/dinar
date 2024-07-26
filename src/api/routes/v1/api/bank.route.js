@@ -4,17 +4,17 @@ const {requireJwtAuth, restrictTo} = require('../../../../middlewares/auth');
 const {bankController} = require('../../../controllers');
 
 const router = express.Router();
-router.use(requireJwtAuth);
+// router.use(requireJwtAuth);
 
 router
     .route('/')
-    .post(bankController.createBank)
+    .post(requireJwtAuth, bankController.createBank)
     .get(bankController.getBanks);
 
 router
     .route('/:bankId')
     .get(bankController.getBank)
-    .patch(bankController.updateBank)
-    .delete(bankController.deleteBank);
+    .patch(requireJwtAuth, bankController.updateBank)
+    .delete(requireJwtAuth, bankController.deleteBank);
 
 module.exports = router;

@@ -1,6 +1,17 @@
 
 const mongoose = require('mongoose');
-const postSchema = new mongoose.Schema({
+// const Double = require('@mongoosejs/double');
+
+const setter = (value) => {
+    const parsedValue = parseFloat(value);
+    if (isNaN(parsedValue)) {
+        return null;
+    }
+    const result = mongoose.Types.Decimal128.fromString(parsedValue.toFixed(2));
+    result._bsontype = 'Double'; // solution
+    return result;
+};
+const postSchema = mongoose.Schema({
    user: {
        type: mongoose.Schema.Types.ObjectId,
        ref: 'User',
@@ -12,10 +23,12 @@ const postSchema = new mongoose.Schema({
          default: 'pending',
          enum: ['pending', 'approved', 'rejected', 'hidden'],
     },
-    loanReason:{
+    loanReasonType:{
         type: String,
-        required: true,
-        enum: ['business', 'education', 'travel', 'medical', 'shopping', 'houseBuying', 'carBuying', 'other',],
+        required: function(){
+            return this.type === 'inCash';
+        },
+        enum: ['business', 'education', 'travel', 'medical','wedding', 'shopping', 'houseBuying', 'carBuying', 'other',],
     },
     loanReasonDescription:{
         type: String,
@@ -23,7 +36,7 @@ const postSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true,
-        enum: ['lending', 'borrowing'],
+        enum: ['inCash', 'inKind'],
     },
     title:{
         type: String,
@@ -36,44 +49,87 @@ const postSchema = new mongoose.Schema({
 
     images:{
         type: [String],
+        required: function(){
+            return this.type === 'inKind';
+        },
     },
     interestRate: {
-        type: Number,
-        required: true,
+        type: mongoose.SchemaTypes.Mixed,
+            set: setter,
+            // get: (value) => {
+            //     return parseFloat(+value);
+            // },
+        required: function(){
+            return this.type ==='inCash';
+        },
     },
     amount:{
-        type: Number,
-        required: true,
+        type: mongoose.SchemaTypes.Mixed,
+            set: setter,
+        required: function(){
+            return this.type ==='inCash';
+        },
     },
-    duration:{
+    tenureMonths:{
         type: Number,
         required: true,
     },
     overdueInterestRate:{
-        type: Number,
-        required: true,
+        type: mongoose.SchemaTypes.Mixed,
+        set: setter,
+        required: function(){
+            return this.type ==='inCash';
+        },
     },
     maxInterestRate:{
-        type: Number,
+        type: mongoose.SchemaTypes.Mixed,
+            set: setter,
+
     },
     maxAmount:{
-        type: Number,
+        type: mongoose.SchemaTypes.Mixed,
+        set: setter,
     },
-    maxDuration:{
+    maxTenureMonths:{
         type: Number,
     },
     maxOverdueInterestRate:{
-        type: Number,
+        type: mongoose.SchemaTypes.Mixed,
+            set: setter,
     },
     rejectionReason:{
         type: String,
     },
 
-   
+    deletedAt:{
+        type: Date,
+    },
+
+    postExpiresAfter:{
+        type: Number,
+        // required: true,
+        default: 3,
+        
+    },
+    postExpiresAt:{
+        type: Date,
+       
+    },
+    
+    
+
 },{
     timestamps: true,
 
 });
-
+postSchema.pre('save', function(next){
+    if(this.isNew || this.isModified('postExpiresAfter')){
+        this.postExpiresAt = new Date(Date.now() + this.postExpiresAfter*24*60*60*1000);
+    }
+    next();
+})
+postSchema.index({
+    postExpiresAt: 1,
+},{expireAfterSeconds: 0});
 
 module.exports = mongoose.model('Post', postSchema);

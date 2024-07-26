@@ -1,19 +1,28 @@
 const {User, Post} = require("../models");
 const {APIError} = require("../../errors/apiError");
-const {APIFeatures} = require("../../utils/apiFeatures");
+const APIFeatures = require("../../utils/apiFeatures");
 
 const logger = require("../../config/logger");
 const {postJoiValidator} = require("../../validators");
 
 const createPost = async (user, body) => {
+    // consol.log('alewatom')
     postJoiValidator.createPostSchema(body);
-    const newPost = new Post({
-        ...body,
-        user: user._id,
-    });
+    try{
+        console.log('personnally');
 
-    const post = await Post.create(newPost);
-    return post;
+        const newPost =  new Post({
+            ...body,
+            user: user._id,
+        });
+        // const post = await Post.create(newPost);
+        // create a new post
+        await newPost.save();
+        console.log(newPost);
+        return newPost;
+    }catch(error){
+        logger.error(error.message);
+    }
 };
 
 
@@ -25,15 +34,19 @@ const getPosts = async (user, query) => {
         .paginate();
 
     const posts = await apiFeatures.query
-        .populate("user", "firstName lastName email")
+        .populate("user")
         
-
-    return posts;
+    limit = query.limit? query.limit : 10;
+    console.log(posts);
+    return {
+        result: posts,
+        num_of_pages: Math.ceil(posts.length / limit)};
 };
 
 const getPost = async (user, postId) => {
     const post = await Post.findById(postId)
-        .populate("user", "firstName lastName email");
+        // .populate("user", "firstName lastName email");
+        .populate("user");
     if (!post) {
         throw new APIError(404, "Post not found");
     }
@@ -49,9 +62,12 @@ const myPosts = async (user, query) => {
         .paginate();
 
     const posts = await apiFeatures.query
-        .populate("user", "firstName lastName email");
+        .populate("user");
 
-    return posts;
+        limit = query.limit? query.limit : 10;
+        return {
+            result: posts,
+            num_of_pages: Math.ceil(posts.length / limit)};
 };
 
 const updatePost = async (user, postId, body) => {

@@ -3,7 +3,7 @@ const handlebars = require('handlebars');
 const fs = require('fs');
 const path = require('path');
 const {email, server} = require('./config');
-const {logger} = require('./logger')
+const logger = require('./logger')
 
 // 1. create a transporter
 const transporter = nodemailer.createTransport({
@@ -41,6 +41,7 @@ const sendEmail = (options) =>{
             html: compiledTemplate(options.payload),
         };
         // 3. actuall send the email
+        console.log('dooo', mailOptions);
          transporter.sendMail(mailOptions, (err, info)=>{
             if(err){
                 logger.error(`Unable to send Email: ${err.message}`);
@@ -49,7 +50,7 @@ const sendEmail = (options) =>{
             }
         });
     }catch(error){
-        console.log(error);
+        console.log('doti', error);
         return new Error(error);
     }
 }

@@ -40,7 +40,8 @@ const addressSchema = mongoose.Schema(
     {
         streetAddress: {
             type: String,
-            required: [true,"please enter street Address" ],
+            default: 'Gerji',
+            // required: [true,"please enter street Address" ],
             minLength: 3,
             maxLength: 50,
             //TODO is there a minimum and maximum for street address
@@ -51,19 +52,22 @@ const addressSchema = mongoose.Schema(
         },
         city: {
             type: String,
-            required: [true, "please enter city"],
+            default: 'Addis Ababa',
+            // required: [true, "please enter city"],
             minLength: 3,
             maxLength: 50,
         },
         stateProvince: {
             type: String,
-            required: [true, "please enter state/province"],
+            default: 'Addis Ababa',
+            // required: [true, "please enter state/province"],
             minLength: 3,
             maxLength: 50,
         },
         country: {
             type: String,
-            required: [true, "please enter country" ],
+            default: 'Ethiopia',
+            // required: [true, "please enter country" ],
             minLength: 3,
             maxLength: 50,
         },
@@ -80,7 +84,7 @@ const phoneNumberSchema = mongoose.Schema(
     {
         countryCode: {
             type: String,
-            required: [true, "Please enter your country code"],
+            // required: [true, "Please enter your country code"],
             pattern: /^[A-Z]{2}/,
         },
         number: {
@@ -165,6 +169,27 @@ const notificationPreferenceSchema = mongoose.Schema(
     },
     { _id: false }
 );
+const ransomSchema = new mongoose.Schema({
+    type: {
+        type: String, 
+        required: true,
+        enum: ['salary', 'property', 'other'],
+    },
+    value:{
+        type: Number,
+        required: true,
+    },
+    status:{
+        type: String,
+        required: true,
+        default: 'pending',
+        enum: ['pending', 'approved', 'rejected', 'hidden'],
+   },
+    description:{
+        type: String,
+        required: true,
+    },
+});
 
 const options = { discriminatorKey: "userType" };
 
@@ -199,7 +224,7 @@ const userSchema = mongoose.Schema(
             type: String,
             maxLength: 60,
             trim: true,
-            required: [function() { return this.isRegistrationComplete; }, "Please enter your passwod"]
+            // required: [function() { return this.isRegistrationComplete; }, "Please enter your passwod"]
             //you cant select false, as it is needed by bcrypt
             // select: false,
             //dont change it to make it more strong
@@ -209,13 +234,15 @@ const userSchema = mongoose.Schema(
         },
         dob: {
             type: Date,
-            required: [function() { return this.isRegistrationComplete; }, "Please enter your date of birth"],
+            default: Date.now(),
+            // required: [function() { return this.isRegistrationComplete; }, "Please enter your date of birth"],
             //TODO make sure the date is not in the future
             //TODO make sure the date is not in the past 100 years
         },
         gender: {
             type: String,
-            required: [function() { return this.isRegistrationComplete; }, "Please enter gender"],
+            default: 'male',
+            // required: [function() { return this.isRegistrationComplete; }, "Please enter gender"],
             enum: ["male", "female"],
         },
         phoneNumber: phoneNumberSchema,
@@ -233,12 +260,22 @@ const userSchema = mongoose.Schema(
         },
         banReason: {
             type: String,
-            default: null,
+            default: '',
         },
         banUntil:{
             type: Date,
-            default: null,
+            default: Date.now(),
         },
+
+        isIdentityVerified: {
+            type: Boolean,
+            default: false,
+        },
+
+        ransoms:[
+                ransomSchema,
+            ],
+        
         
 
         status: {
@@ -259,7 +296,7 @@ const userSchema = mongoose.Schema(
             unique: true,
             sparse: true,
         },
-        lastOnline:{
+        lastActiveAt:{
             type: Date,
             default: Date.now,
         },

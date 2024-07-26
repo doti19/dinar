@@ -1,5 +1,5 @@
-const { User: UserSchema, Invitation } = require("../models");
-const User = UserSchema.User;
+const { User, Invitation } = require("../models");
+
 const { APIError } = require("../../errors/apiError");
 const { userTransformer, modelTransformer } = require("../../transformers");
 const { userJoiValidator, courseJoiValidator } = require("../../validators");
@@ -19,20 +19,26 @@ const sendEmail = require("../../config/email");
 const { checkError } = require("../../utils/checkError");
 const { status } = require("../../validators/helpers/fields/group.fields");
 const { lastName } = require("../../validators/helpers/fields/user.fields");
-const updateProfile = async (user, body) => {
+const updateProfile = async (user, body, avatar) => {
   try {
     userJoiValidator.updateProfileValidator(body);
   } catch (err) {
     throw new Error(err);
   }
-  const transformedBody = userTransformer.userUpdateBodyTransformer(body);
-
+  // const transformedBody = userTransformer.userUpdateBodyTransformer(body);
+// console.log(transformedBody);
+if(avatar){
+  console.log(avatar);
+  await uploadProfile(user, avatar);
+}
   try {
     const updatedUser = await User.findByIdAndUpdate(
-      {
-        _id: user._id,
-      },
-      transformedBody,
+      
+         user._id,
+    {
+
+      ...body,
+    },
       { new: true }
     );
     return updatedUser;
@@ -44,39 +50,7 @@ const updateProfile = async (user, body) => {
 const deleteProfile = async (user) => {
   try {
     const role = user.role;
-    if (role == "parent") {
-      if (user.children.length > 0) {
-        for (const childId of user.children) {
-          await Player.findByIdAndUpdate(childId, {
-            $pull: { parents: user.id },
-          });
-        }
-      }
-    } else if (role == "coach") {
-      if (user.players.length > 0) {
-        for (const playerId of user.players) {
-          await Player.findByIdAndUpdate(playerId, {
-            $pull: { coaches: user.id },
-          });
-        }
-      }
-    } else if (role == "player") {
-      if (user.coaches.length > 0) {
-        for (const coachId of user.coaches) {
-          await Coach.findByIdAndUpdate(coachId, {
-            $pull: { players: user.id },
-          });
-        }
-      }
-      if (user.parents.length > 0) {
-        for (const parentId of user.parents) {
-          await Parent.findByIdAndUpdate(parentId, {
-            $pull: { children: user.id },
-          });
-        }
-      }
-      await UsersCourse.UserCourses.deleteMany({ userId: user._id });
-    }
+   
     const deletedUser = await User.findByIdAndDelete({ _id: user._id });
 
     return { message: "User deleted successfully" };
@@ -90,14 +64,18 @@ const deleteProfile = async (user) => {
 };
 
 const uploadProfile = async (user, file) => {
+
+  // const fileAddress = `/public/uploads/images${file.originalname}`;
   try {
+    console.log('aleku : ',file.filename);
     const updatedUser = await User.findByIdAndUpdate(
-      {
-        _id: user._id,
-      },
-      { avatar: file.path },
+      
+      user._id,
+    
+      { avatar: file.filename},
       { new: true }
     );
+    console.log('demoney ', updatedUser.avatar);
     return updatedUser;
   } catch (err) {
     throw new APIError({

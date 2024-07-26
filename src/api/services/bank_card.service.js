@@ -1,6 +1,6 @@
 const {User, BankCard} = require('../models');
 const {APIError} = require('../../errors/apiError');
-const {APIFeatures} = require('../../utils/apiFeatures');
+const APIFeatures = require('../../utils/apiFeatures');
 
 const logger = require('../../config/logger');
 
@@ -16,7 +16,10 @@ const getBankCards = async (user, query) => {
     const bankCards = await apiFeatures.query
         .populate('bank', 'name');
 
-    return bankCards;
+        limit = query.limit? query.limit : 10;
+        return {
+            result: bankCards,
+            num_of_pages: Math.ceil(bankCards.length / limit)};
 }
 
 const getBankCard = async (user, cardNumber) => {
@@ -79,9 +82,14 @@ const makePrimaryBankCard = async (user, cardNumber) => {
 
 
 const getPrimaryBankCard = async (user) => {
-    const bankCard = await BankCard.findOne({user: user._id, isPrimary: true})
+    const bankCard = await BankCard.findOne({user: user._id.toString(), isPrimary: true})
     .populate('bank', 'name');
-    return bankCard;
+    // console.log('doootii');
+    // if(!bankCard){
+    //     throw new APIError(404, 'Primary bank card not found');
+    // }
+    return {
+        result: bankCard};
 }
 
 module.exports = {

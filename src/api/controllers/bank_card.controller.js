@@ -20,6 +20,7 @@ const getBankCards = catchAsync(async (req, res, next) => {
 
 const getBankCard = catchAsync(async (req, res, next) => {
     try {
+        // console.log('halll');
         const result = await bankCardService.getBankCard(req.user, req.params.cardNumber);
         res.send(result);
     } catch (error) {

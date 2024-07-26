@@ -9,4 +9,7 @@ module.exports.postController = require('./post.controller');
 module.exports.loanRequestController = require('./loan_request.controller');
 module.exports.loanContractController = require('./loan_contract.controller');
 module.exports.bankCardController = require('./bank_card.controller');
-
+module.exports.bankController = require('./bank.controller');
+module.exports.blogController = require('./blog.controller');
+module.exports.mediaController = require('./media.controller');
+module.exports.ransomController = require('./ransom.controller');

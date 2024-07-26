@@ -8,7 +8,7 @@ const router = express.Router();
 router
     .route("/profile")
     .get(requireJwtAuth, userController.viewProfile)
-    .patch(requireJwtAuth, userController.updateProfile)
+    .patch(requireJwtAuth, upload.single('avatar'),userController.updateProfile)
     .delete(requireJwtAuth, userController.deleteProfile);
 
 

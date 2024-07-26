@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { User } = require('./user.model');
+// const { User } = require('./user.model');
 
 const bankCardSchema = new mongoose.Schema({
     bank:{
@@ -7,7 +7,7 @@ const bankCardSchema = new mongoose.Schema({
         ref: 'Bank',
         required: true,
     },
-    User:{
+    user:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,

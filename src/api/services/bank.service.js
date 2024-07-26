@@ -1,6 +1,6 @@
 const {User, Bank} = require('../models');
 const {APIError} = require('../../errors/apiError');
-const {APIFeatures} = require('../../utils/apiFeatures');
+const APIFeatures = require('../../utils/apiFeatures');
 
 const logger = require('../../config/logger');
 
@@ -14,8 +14,10 @@ const getBanks = async (query) => {
         .paginate();
 
     const banks = await apiFeatures.query;
-
-    return banks;
+    limit = query.limit? query.limit : 10;
+    return {
+        result: banks,
+        num_of_pages: Math.ceil(banks.length / limit)};
 }
 
 const getBank = async (bankCode) => {

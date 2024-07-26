@@ -1,6 +1,6 @@
 const {User, LoanContract} = require("../models");
 const {APIError} = require("../../errors/apiError");
-const {APIFeatures} = require("../../utils/apiFeatures");
+const APIFeatures = require("../../utils/apiFeatures");
 
 const logger = require("../../config/logger");
 
@@ -18,8 +18,10 @@ const getBorrowerLoanContracts = async(user, query)=>{
         .populate("receiverBankCard", "bank")
         .populate("senderBankCard", "bank");
 
-
-    return loanContracts;
+        limit = query.limit? query.limit : 10;
+        return {
+            result: loanContracts,
+            num_of_pages: Math.ceil(loanContracts.length / limit)};
 }
 
 const getLenderLoanContracts = async(user, query)=>{
@@ -35,8 +37,10 @@ const getLenderLoanContracts = async(user, query)=>{
         .populate("borrower", "firstName lastName email avatar")
         .populate("receiverBankCard", "bank")
         .populate("senderBankCard", "bank");
-
-    return loanContracts;
+        limit = query.limit? query.limit : 10;
+        return {
+            result: loanContracts,
+            num_of_pages: Math.ceil(loanContracts.length / limit)};
 }
 
 module.exports = {

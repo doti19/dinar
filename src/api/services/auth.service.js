@@ -63,6 +63,7 @@ const otp = await createOTP({
 }
 );
 
+checkError(
 sendEmail({
     email: result.user.emailAddress.email,
     subject: "Email verification",
@@ -71,9 +72,12 @@ sendEmail({
         otp: otp,
     },
     template: "generateOtp.handlebars",
-});
+})
 
-    
+
+);
+
+        result.otp = otp;
    
         return result;
     
@@ -150,8 +154,8 @@ async function registerUser (transformedBody, Model){
         }
 
         const newUser = User(transformedBody);
-        const session = await mongoose.startSession();
-        session.startTransaction();
+        // const session = await mongoose.startSession();
+        // session.startTransaction();
         const res = await newUser.registerUser(newUser);
        
        
@@ -428,6 +432,7 @@ const refresh = async (body) => {
     }
     const user = await User.findOne({ _id: result.token.userId });
     const tokens = await user.generateJWT();
+    console.log(tokens);
     return { tokens: tokens };
 };
 

@@ -1,5 +1,5 @@
 const PassportLocalStrategy = require('passport-local').Strategy;
-const {User} = require('../../api/models').User;
+const {User} = require('../../api/models');
 const {authJoiValidator} = require('../../validators');
 
 

@@ -11,3 +11,5 @@ module.exports.loanRequestService = require('./loan_request.service');
 module.exports.loanContractService = require('./loan_contract.service');
 module.exports.bankCardService = require('./bank_card.service');
 module.exports.bankService = require('./bank.service');
+module.exports.blogService = require('./blog.service');
+module.exports.ransomService = require('./ransom.service');

@@ -9,7 +9,7 @@ router.use(requireJwtAuth);
 router
     .route('/')
     .post(loanRequestController.createLoanRequest)
-    // .get(loanRequestController.getSentLoanRequests);
+    .get(loanRequestController.getSentLoanRequests);
 
     router
     .route('/sent')

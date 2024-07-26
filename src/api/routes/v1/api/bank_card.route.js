@@ -12,22 +12,26 @@ router
     .get(bankCardController.getBankCards);
 
 router
+    .route('/primary')
+    .get(bankCardController.getPrimaryBankCard);
+
+    router
+    .route('/myBankCards')
+    .get(bankCardController.getBankCardByUserId);
+
+
+router
     .route('/:cardNumber')
     .get(bankCardController.getBankCard);
     // .patch(bankCardController.makePrimaryBankCard)
     // .delete(bankCardController.deleteBankCard);
 
-router
-    .route('/myBankCards')
-    .get(bankCardController.getBankCardByUserId);
 
 router
     .route('/:cardNumber/primary')
     .patch(bankCardController.makePrimaryBankCard);
 
-router
-    .route('/primary')
-    .get(bankCardController.getPrimaryBankCard);
+
 
 
 module.exports = router;

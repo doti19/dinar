@@ -40,15 +40,15 @@ async function sendVerificationEmail (email, otp, name){
     const subject = "Email Verification";
     // const text = `Your OTP is ${otp}`;
     console.log('hellllll')
-    await sendEmail({
-        email: email,
-        subject: subject,
-        payload: {
-            name: name,
-            otp: otp,
-        },
-        template: "generateOtp.handlebars",
-    });
+    // await sendEmail({
+    //     email: email,
+    //     subject: subject,
+    //     payload: {
+    //         name: name,
+    //         otp: otp,
+    //     },
+    //     template: "generateOtp.handlebars",
+    // });
 }
 
 otpSchema.pre('save', async function(next){

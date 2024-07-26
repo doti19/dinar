@@ -70,6 +70,8 @@ app.use(express.urlencoded({ extended: true }));
 //serving static files
 const staticFilesPath = path.join(__dirname, '..', '..', '/public');
 app.use(express.static(staticFilesPath));
+app.use(express.static(`${__dirname}/upload`));
+app.use('/images', express.static(path.join(__dirname, '..', '..', '/public/uploads/images')));
 
 //sanitize request data
 //app.use(xss());

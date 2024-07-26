@@ -16,6 +16,7 @@ const {
     type,
     loanReason,
     loanReasonDescription,
+    postExpiresAfter,
 
     
     
@@ -26,14 +27,14 @@ const postStatusField = Joi.string()
     .messages(status)
     .label("Post Status");
 const postLoanReasonField = Joi.string()
-    .valid('business', 'education', 'travel', 'medical', 'shopping', 'houseBuying', 'carBuying', 'other')
+    .valid('business', 'education', 'travel', 'medical', 'shopping', 'wedding', 'houseBuying', 'carBuying', 'other')
     .messages(loanReason)
     .label("Post Loan Reason");
 const postLoanReasonDescriptionField = Joi.string()
     .messages(loanReasonDescription)
     .label("Post Loan Reason Description");
 const postTypeField = Joi.string()
-    .valid('lending', 'borrowing')
+    .valid('inCash', 'inKind')
     .messages(type)
     .label("Post Type");
 
@@ -47,27 +48,35 @@ const postInterestRateField = Joi.number()
 const postAmountField = Joi.number()
     .messages(amount)
     .label("Post Amount");
-const postDurationField = Joi.number()
+const postTenureField = Joi.number()
     .messages(duration)
-    .label("Post Duration");
+    .label("Post Tenure");
 const postOverdueInterestRateField = Joi.number()
     .messages(overdueInterestRate)
     .label("Post Overdue Interest Rate");
 const postMaxInterestRateField = Joi.number()
     .messages(maxInterestRate)
-    .label("Post Max Interest Rate");
+    .label("Post Max Interest Rate")
+    .allow(null);
 const postMaxAmountField = Joi.number()
     .messages(maxAmount)
-    .label("Post Max Amount");
-const postMaxDurationField = Joi.number()
+    .label("Post Max Amount")
+    .allow(null);
+
+const postMaxTenureField = Joi.number()
     .messages(maxDuration)
-    .label("Post Max Duration");
+    .label("Post Max Tenure")
+    .allow(null);
+
 const postMaxOverdueInterestRateField = Joi.number()
     .messages(maxOverdueInterestRate)
-    .label("Post Max Overdue Interest Rate");
+    .label("Post Max Overdue Interest Rate")
+    .allow(null);
+
 const postRejectionReasonField = Joi.string()
     .messages(rejectionReason)
-    .label("Post Rejection Reason");
+    .label("Post Rejection Reason")
+    .allow(null);
 
 
 
@@ -80,6 +89,13 @@ const postDescriptionField = Joi.string()
     .messages(postDescription)
     .label("Post Description");
 
+    const postExpiresAfterField = Joi.number()
+    .max(14)
+    .min(1)
+    .messages(postExpiresAfter)
+    .label("Post Expires After");
+
+
 module.exports = {
     postStatusField,
     postLoanReasonField,
@@ -88,14 +104,15 @@ module.exports = {
     postImagesField,
     postInterestRateField,
     postAmountField,
-    postDurationField,
+    postDurationField: postTenureField,
     postOverdueInterestRateField,
     postMaxInterestRateField,
     postMaxAmountField,
-    postMaxDurationField,
+    postMaxDurationField: postMaxTenureField,
     postMaxOverdueInterestRateField,
     postRejectionReasonField,
     postTitleField,
     postDescriptionField,
+    postExpiresAfterField,
 
 }
