@@ -28,33 +28,34 @@ const createPost = async (user, body) => {
 
 const getPosts = async (user, query) => {
     const apiFeatures = new APIFeatures(Post.find(), query)
-        .filter()
-        .sort()
-        .limitFields()
-        .paginate();
-
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+    
     const posts = await apiFeatures.query
-        .populate("user")
-        
+    .populate("user");
+    
     limit = query.limit? query.limit : 10;
     console.log(posts);
     return {
         result: posts,
         num_of_pages: Math.ceil(posts.length / limit)};
-};
-
-const getPost = async (user, postId) => {
-    const post = await Post.findById(postId)
+    };
+    
+    const getPost = async (user, postId) => {
+        const post = await Post.findById(postId)
         // .populate("user", "firstName lastName email");
         .populate("user");
-    if (!post) {
-        throw new APIError(404, "Post not found");
-    }
-
-    return post;
-};
-
-const myPosts = async (user, query) => {
+        if (!post) {
+            throw new APIError(404, "Post not found");
+        }
+        
+        return post;
+    };
+    
+    const myPosts = async (user, query) => {
+    console.log('alewatom', query);
     const apiFeatures = new APIFeatures(Post.find({user: user._id}), query)
         .filter()
         .sort()

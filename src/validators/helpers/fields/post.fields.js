@@ -17,6 +17,7 @@ const {
     loanReason,
     loanReasonDescription,
     postExpiresAfter,
+    unit,
 
     
     
@@ -95,6 +96,11 @@ const postDescriptionField = Joi.string()
     .messages(postExpiresAfter)
     .label("Post Expires After");
 
+    const unitField = Joi.string()
+    .valid('month', 'year')
+    .messages(unit)
+    .label("Unit");
+
 
 module.exports = {
     postStatusField,
@@ -114,5 +120,6 @@ module.exports = {
     postTitleField,
     postDescriptionField,
     postExpiresAfterField,
+    unitField,
 
 }

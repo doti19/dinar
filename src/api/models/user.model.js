@@ -195,7 +195,7 @@ const options = { discriminatorKey: "userType" };
 
 const userSchema = mongoose.Schema(
     {
-        email: emailSchema,
+        // email: emailSchema,
        hasOtp:{
               type: Boolean,
               default: false,
@@ -326,7 +326,7 @@ const userSchema = mongoose.Schema(
         
     },
     {
-        timestamp: true,
+        timestamps: true,
         versionKey: false,
         // toObj: {
         //     virtuals: true,

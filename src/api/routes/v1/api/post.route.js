@@ -12,14 +12,14 @@ router
     .get(postController.getPosts);
 
 router
+        .route('/my')
+        .get(postController.myPosts);
+router
     .route('/:postId')
     .get(postController.getPost)
     .patch(postController.updatePost)
     .delete(postController.deletePost);
 
-router
-    .route('/my')
-    .get(postController.myPosts);
 
 router
     .route('/:postId/approve')

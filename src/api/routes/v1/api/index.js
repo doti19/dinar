@@ -13,6 +13,7 @@ const bankRoutes = require('./bank.route');
 const blogRoutes = require('./blog.route');
 const mediaRoutes = require('./media.route');
 const ransomRoutes = require('./ransom.route');
+const bidRoutes = require('./bid.route');
 
 
 const router = express.Router();
@@ -31,6 +32,7 @@ router.use('/banks', bankRoutes);
 router.use('/blogs', blogRoutes);
 router.use('/media', mediaRoutes);//require('./media.route
 router.use('/ransoms', ransomRoutes);
+router.use('/bids', bidRoutes);
 
 
 

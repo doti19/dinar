@@ -15,4 +15,5 @@ module.exports.Blog = require('./blog.model');
 module.exports.LoanContract = require('./loan_contract.model');
 module.exports.LoanRequest = require('./loan_request.model');
 module.exports.Post = require('./post.model');
+module.exports.Bid = require('./bid.model');
 

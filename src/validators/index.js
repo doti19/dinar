@@ -11,3 +11,4 @@ module.exports.bankCardJoiValidator = require('./bank_card.joi.validator');
 module.exports.bankJoiValidator= require('./bank.joi.validator');
 module.exports.blogJoiValidator = require('./blog.joi.validator');
 module.exports.ransomJoiValidator = require('./ransom.joi.validator');
+module.exports.bidJoiValidator = require('./bid.joi.validator');

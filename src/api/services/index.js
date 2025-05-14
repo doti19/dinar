@@ -13,3 +13,4 @@ module.exports.bankCardService = require('./bank_card.service');
 module.exports.bankService = require('./bank.service');
 module.exports.blogService = require('./blog.service');
 module.exports.ransomService = require('./ransom.service');
+module.exports.bidService = require('./bid.service');

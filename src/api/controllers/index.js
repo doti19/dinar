@@ -13,3 +13,4 @@ module.exports.bankController = require('./bank.controller');
 module.exports.blogController = require('./blog.controller');
 module.exports.mediaController = require('./media.controller');
 module.exports.ransomController = require('./ransom.controller');
+module.exports.bidController = require('./bid.controller');
